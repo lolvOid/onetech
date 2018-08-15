@@ -18,7 +18,7 @@
 </head>
 
 <body>
-
+<!--{{menu('main')}}-->
 <div class="super_container">
 	
 	<!-- Header -->
@@ -56,8 +56,20 @@
 							</div>
 							<div class="top_bar_user">
 								<div class="user_icon"><img src="images/user.svg" alt=""></div>
-								<div><a href="#">Register</a></div>
-								<div><a href="#">Sign in</a></div>
+								@guest
+								<div><a href="{{route('register')}}">Register</a></div>
+								<div><a href="{{route('login')}}">Sign in</a></div>
+								@else
+								<a href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+								@endguest
 							</div>
 						</div>
 					</div>
@@ -186,7 +198,7 @@
 
 							<div class="main_nav_menu ml-auto">
 								<ul class="standard_dropdown main_nav_dropdown">
-									<li><a href="#">Home<i class="fas fa-chevron-down"></i></a></li>
+									<li><a href="{{ url('/') }}">Home<i class="fas fa-chevron-down"></i></a></li>
 									<li class="hassubs">
 										<a href="#">Super Deals<i class="fas fa-chevron-down"></i></a>
 										<ul>
@@ -287,7 +299,7 @@
 									</ul>
 								</li>
 								<li class="page_menu_item">
-									<a href="#">Home<i class="fa fa-angle-down"></i></a>
+									<a href="{{ url('/') }}">Home<i class="fa fa-angle-down"></i></a>
 								</li>
 								<li class="page_menu_item has-children">
 									<a href="#">Super Deals<i class="fa fa-angle-down"></i></a>
@@ -4465,6 +4477,9 @@
 							<p>Grester London NW18JR, UK</p>
 						</div>
 						<div class="footer_social">
+							<!--<ul>
+
+							</ul>-->
 							<ul>
 								<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
 								<li><a href="#"><i class="fab fa-twitter"></i></a></li>

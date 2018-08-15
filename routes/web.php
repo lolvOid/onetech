@@ -28,3 +28,13 @@ Route::view('/contact','contact');
 //Route::view('/product','product');
 Route::view('/regular','regular');
 //Route::view('/shop','shop');
+Route::view('/auth/register','register');
+Route::view('/auth/login','login');
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Single Product</title>
+<title>{{$product->name}}</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="OneTech shop project">
@@ -55,8 +55,20 @@
 							</div>
 							<div class="top_bar_user">
 								<div class="user_icon"><img src="/images//user.svg" alt=""></div>
-								<div><a href="#">Register</a></div>
-								<div><a href="#">Sign in</a></div>
+								@guest
+								<div><a href="{{route('register')}}">Register</a></div>
+								<div><a href="{{route('login')}}">Sign in</a></div>
+								@else
+								<a href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logozut') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+								@endguest
 							</div>
 						</div>
 					</div>
@@ -185,7 +197,7 @@
 
 							<div class="main_nav_menu ml-auto">
 								<ul class="standard_dropdown main_nav_dropdown">
-									<li><a href="/main">Home<i class="fas fa-chevron-down"></i></a></li>
+									<li><a href="{{ url('/') }}">Home<i class="fas fa-chevron-down"></i></a></li>
 									<li class="hassubs">
 										<a href="#">Super Deals<i class="fas fa-chevron-down"></i></a>
 										<ul>
@@ -286,7 +298,7 @@
 									</ul>
 								</li>
 								<li class="page_menu_item">
-									<a href="#">Home<i class="fa fa-angle-down"></i></a>
+									<a href="{{ url('/') }}">Home<i class="fa fa-angle-down"></i></a>
 								</li>
 								<li class="page_menu_item has-children">
 									<a href="#">Super Deals<i class="fa fa-angle-down"></i></a>
@@ -349,15 +361,17 @@
 				<!-- /images/ -->
 				<div class="col-lg-2 order-lg-1 order-2">
 					<ul class="image_list">
-						<li data-image="/images//single_4.jpg"><img src="{{'/images/'.$product->slug.'.jpg'}}" alt=""></li>
-						<li data-image="/images//single_2.jpg"><img src="{{'/images/'.$product->slug.'.jpg'}}" alt=""></li>
-						<li data-image="/images//single_3.jpg"><img src="{{'/images/'.$product->slug.'.jpg'}}" alt=""></li>
+					@foreach(json_decode($product->images,true) as $image)
+						<li data-image="{{'/storage/'.$image}}"><img src="{{'/storage/'.$image}}" alt=""></li>
+						<!--<li data-image="/images/single_2.jpg"><img src="" alt=""></li>
+						<li data-image="/images/single_3.jpg"><img src="" alt=""></li>-->
+					@endforeach
 					</ul>
 				</div>
 
 				<!-- Selected Image -->
 				<div class="col-lg-5 order-lg-2 order-1">
-					<div class="image_selected"><img src="{{'/images/'.$product->slug.'.jpg'}}" alt=""></div>
+					<div class="image_selected"><img src="{{'/storage/'.$product->image}}" alt=""></div>
 				</div>
 
 				<!-- Description -->
@@ -366,7 +380,7 @@
 						<div class="product_category">Laptops</div>
 						<div class="product_name">{{$product->name}}</div>
 						<div class="rating_r rating_r_4 product_rating"><i></i><i></i><i></i><i></i><i></i></div>
-						<div class="product_text"><p>{{$product->description}}</p></div>
+						<div class="product_text"><p>{!!$product->description!!}</p></div>
 						<div class="order_info d-flex flex-row">
 							<form action="{{ route('cart.store', $product) }}" method="POST">
 							{{ csrf_field() }}
